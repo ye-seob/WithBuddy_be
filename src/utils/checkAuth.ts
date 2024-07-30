@@ -9,8 +9,6 @@ const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).send("토큰이 누락되었습니다");
     }
 
-    const decodedToken = jwt.verify(token, process.env.ACCESS_SECRET);
-    req.user = decodedToken;
     next();
   } catch (error) {
     return res.status(401).send("토큰이 만료되었습니다");
