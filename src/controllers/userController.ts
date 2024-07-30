@@ -7,6 +7,7 @@ import Major from "../models/majorModel";
 export const login = async (req: Request, res: Response) => {
   try {
     const { studentId, pin }: { studentId: string; pin: string } = req.body;
+
     const user = await collection.findOne({ studentId });
 
     if (!user) return res.status(404).send("등록되지 않은 학번입니다");
