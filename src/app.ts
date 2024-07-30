@@ -19,6 +19,20 @@ const corsOptions = {
   credentials: true,
 };
 
+app.use(
+  cors({
+    origin: [
+      "https://web-withbuddy-fe-lz8vrmt22573d2de.sel4.cloudtype.app/",
+      "https://port-0-withbuddy-be-lz8vrmt22573d2de.sel4.cloudtype.app/",
+      "http://localhost:5173",
+    ],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true,
+  })
+);
+
 app.use(cors(corsOptions));
 
 connectDB();
