@@ -13,12 +13,6 @@ const app: Application = express();
 
 app.use(cookieParser());
 
-const corsOptions = {
-  origin: "http://localhost:5173",
-  withCredentials: true,
-  credentials: true,
-};
-
 app.use(
   cors({
     origin: [
@@ -32,8 +26,6 @@ app.use(
     credentials: true,
   })
 );
-
-app.use(cors(corsOptions));
 
 connectDB();
 
