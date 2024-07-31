@@ -7,10 +7,10 @@ import rakingRoutes from "./rankingRoutes";
 
 const router = express.Router();
 
-router.use("/api/user", userRoutes);
-router.use("/api/auth", authRoutes);
-router.use("/api/mail", mailRoutes);
-router.use("/api/match", matchRoutes);
-router.use("/api/ranking", rakingRoutes);
+router.use("/user", userRoutes);
+router.use("/auth", authRoutes);
+router.use("/mail", mailRoutes);
+router.use("/match", matchRoutes);
+router.use("/ranking", rakingRoutes);
 
 export default router;
