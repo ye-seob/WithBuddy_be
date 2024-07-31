@@ -12,4 +12,4 @@ async function connectDB() {
   }
 }
 
-module.exports = connectDB;
+export default connectDB;
