@@ -83,15 +83,19 @@ export const signup = async (req: Request, res: Response) => {
       kakaoId,
       mbti,
     } = req.body;
-
+    console.log(1);
     if (pin != pinConfirm) {
       return res.status(500).json("pin번호 불일치");
     }
+    console.log(2);
     const existingUser = await collection.findOne({ studentId });
+    console.log(3);
     if (existingUser) {
       return res.status(500).json("이미 가입된 학번입니다.");
     }
+    console.log(4);
     const hashingPassword = await bcrypt.hash(pin, 5);
+    console.log(6);
     await collection.create({
       name,
       studentId,
@@ -102,6 +106,7 @@ export const signup = async (req: Request, res: Response) => {
       kakaoId,
       mbti,
     });
+    console.log(7);
     res.status(200).send("회원가입 성공했습니다.");
     await Major.findOneAndUpdate(
       { name: major },
