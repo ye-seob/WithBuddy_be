@@ -64,8 +64,16 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken", {
+      secure: true,
+      sameSite: "none",
+      httpOnly: true,
+    });
+    res.clearCookie("refreshToken", {
+      secure: true,
+      sameSite: "none",
+      httpOnly: true,
+    });
     res.status(200).json({
       message: "로그아웃 성공",
     });
