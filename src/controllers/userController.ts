@@ -96,6 +96,7 @@ export const signup = async (req: Request, res: Response) => {
     console.log(4);
     const hashingPassword = await bcrypt.hash(pin, 5);
     console.log(6);
+    console.log(name, studentId, major, pin, email, instaId, kakaoId, mbti);
     await collection.create({
       name,
       studentId,
@@ -106,6 +107,7 @@ export const signup = async (req: Request, res: Response) => {
       kakaoId,
       mbti,
     });
+
     console.log(7);
     res.status(200).send("회원가입 성공했습니다.");
     await Major.findOneAndUpdate(
