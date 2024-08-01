@@ -36,12 +36,12 @@ export const login = async (req: Request, res: Response) => {
 
       res.cookie("accessToken", accessToken, {
         secure: process.env.NODE_ENV === "production", // HTTPS 환경에서는 true, 그렇지 않으면 false
-        sameSite: "strict",
+        sameSite: "none",
         httpOnly: true,
       });
       res.cookie("refreshToken", refreshToken, {
         secure: process.env.NODE_ENV === "production", // HTTPS 환경에서는 true, 그렇지 않으면 false
-        sameSite: "strict",
+        sameSite: "none",
         httpOnly: true,
       });
       const response = {
