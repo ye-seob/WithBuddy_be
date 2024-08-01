@@ -36,12 +36,12 @@ export const login = async (req: Request, res: Response) => {
 
       res.cookie("accessToken", accessToken, {
         secure: true,
-        sameSite: "none",
+        sameSite: "lax",
         httpOnly: true,
       });
       res.cookie("refreshToken", refreshToken, {
         secure: true,
-        sameSite: "none",
+        sameSite: "lax",
         httpOnly: true,
       });
       const response = {
