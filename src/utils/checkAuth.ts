@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.cookies.accessToken;
+    console.log(req.cookies);
     if (!token) {
       return res.status(401).send("토큰이 누락되었습니다");
     }
@@ -17,6 +18,8 @@ const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
 const refreshToken = async (req: Request, res: Response) => {
   try {
     const token = req.cookies.refreshToken;
+
+    console.log(req.cookies);
     if (!token) {
       return res
         .status(401)
