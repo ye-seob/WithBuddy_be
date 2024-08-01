@@ -11,6 +11,7 @@ export const login = async (req: Request, res: Response) => {
     const user = await collection.findOne({ studentId });
 
     if (!user) return res.status(404).send("등록되지 않은 학번입니다");
+
     const passwordMatching = await bcrypt.compare(pin, user.pin);
     if (passwordMatching) {
       const accessToken: string = jwt.sign(
@@ -34,14 +35,15 @@ export const login = async (req: Request, res: Response) => {
       );
 
       res.cookie("accessToken", accessToken, {
-        secure: true,
+        secure: process.env.NODE_ENV === "production", // HTTPS 환경에서는 true, 그렇지 않으면 false
+        sameSite: "strict",
+        httpOnly: true,
       });
       res.cookie("refreshToken", refreshToken, {
+        secure: process.env.NODE_ENV === "production", // HTTPS 환경에서는 true, 그렇지 않으면 false
+        sameSite: "strict",
         httpOnly: true,
-        secure: true,
       });
-
-      console.log(accessToken, refreshToken);
       const response = {
         userName: user.name,
         major: user.major,
