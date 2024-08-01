@@ -40,6 +40,8 @@ export const login = async (req: Request, res: Response) => {
         httpOnly: true,
         secure: true,
       });
+
+      console.log(accessToken, refreshToken);
       const response = {
         userName: user.name,
         major: user.major,
@@ -83,19 +85,14 @@ export const signup = async (req: Request, res: Response) => {
       kakaoId,
       mbti,
     } = req.body;
-    console.log(1);
     if (pin != pinConfirm) {
       return res.status(500).json("pin번호 불일치");
     }
-    console.log(2);
     const existingUser = await collection.findOne({ studentId });
-    console.log(3);
     if (existingUser) {
       return res.status(500).json("이미 가입된 학번입니다.");
     }
-    console.log(4);
     const hashingPassword = await bcrypt.hash(pin, 5);
-    console.log(6);
     console.log(name, studentId, major, pin, email, instaId, kakaoId, mbti);
     await collection.create({
       name,
