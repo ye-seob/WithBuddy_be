@@ -38,12 +38,14 @@ export const login = async (req: Request, res: Response) => {
         sameSite: "none",
         httpOnly: true,
         domain: ".skuwithbuddy.com",
+        path: "/",
       });
       res.cookie("refreshToken", refreshToken, {
         secure: true,
         sameSite: "none",
         httpOnly: true,
         domain: ".skuwithbuddy.com",
+        path: "/",
       });
 
       const response = {
