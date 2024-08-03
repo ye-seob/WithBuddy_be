@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  bio: {
+    type: String,
+    required: false,
+  },
 });
 
 const collection = mongoose.model("users", userSchema);

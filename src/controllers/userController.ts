@@ -50,6 +50,7 @@ export const login = async (req: Request, res: Response) => {
         instaId: user.instaId,
         kakaoId: user.kakaoId,
         mbti: user.mbti,
+        bio: user.bio,
       };
 
       res.status(200).send(response);
@@ -94,16 +95,18 @@ export const signup = async (req: Request, res: Response) => {
       instaId,
       kakaoId,
       mbti,
+      bio,
     } = req.body;
+
     if (pin != pinConfirm) {
       return res.status(500).json("pin번호 불일치");
     }
     const existingUser = await collection.findOne({ studentId });
+
     if (existingUser) {
       return res.status(500).json("이미 가입된 학번입니다.");
     }
     const hashingPassword = await bcrypt.hash(pin, 5);
-    console.log(name, studentId, major, pin, email, instaId, kakaoId, mbti);
     await collection.create({
       name,
       studentId,
@@ -113,9 +116,9 @@ export const signup = async (req: Request, res: Response) => {
       instaId,
       kakaoId,
       mbti,
+      bio,
     });
 
-    console.log(7);
     res.status(200).send("회원가입 성공했습니다.");
     await Major.findOneAndUpdate(
       { name: major },
@@ -132,10 +135,15 @@ export const deleteUser = async (req: Request, res: Response) => {
     const studentId = req.body.studentId;
 
     const user = await collection.findOne({ studentId });
-
+    console.log(user);
     const result = await collection.deleteOne(user);
 
     if (result.deletedCount === 1) {
+      await Major.findOneAndUpdate(
+        { name: user.major },
+        { $inc: { number: -1 } },
+        { new: true, upsert: true }
+      );
       res.status(200).send("삭제되었습니다.");
     } else {
       res.status(404).send("삭제에 실패했습니다");

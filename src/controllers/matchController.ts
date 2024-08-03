@@ -23,6 +23,7 @@ export const match = async (req: Request, res: Response) => {
         instaId: 1,
         kakaoId: 1,
         mbti: 1,
+        bio: 1,
         _id: 0,
       }
     );

@@ -4,8 +4,11 @@ const bcrypt = require("bcrypt");
 
 export const editUserInfo = async (req: Request, res: Response) => {
   try {
-    const { newName, newPin, studentId, newInstaId, newKakaoId } = req.body;
+    const { newName, newPin, studentId, newInstaId, newKakaoId, newBio } =
+      req.body;
+
     const user = await collection.findOne({ studentId });
+
     if (!user) {
       return res.status(404).send("로그인 후 다시 이용해주세요");
     }
@@ -15,15 +18,11 @@ export const editUserInfo = async (req: Request, res: Response) => {
       user.pin = hashedNewPin;
     }
 
-    if (newName) {
-      user.name = newName;
-    }
-    if (newInstaId) {
-      user.instaId = newInstaId;
-    }
-    if (newKakaoId) {
-      user.newKakaoId = newKakaoId;
-    }
+    if (newName) user.name = newName;
+    if (newInstaId) user.instaId = newInstaId;
+    if (newKakaoId) user.kakaoId = newKakaoId;
+    if (newBio) user.bio = newBio;
+
     await user.save();
 
     return res.status(200).send("사용자 정보가 성공적으로 수정되었습니다.");
