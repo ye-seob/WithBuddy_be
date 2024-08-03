@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express from "express";
 import router from "./routes/index";
 
 import connectDB from "./db";
@@ -9,14 +9,14 @@ dotenv.config();
 
 const cors = require("cors");
 
-const app: Application = express();
+const app = express();
 
 app.use(cookieParser());
 
 const corsOptions = {
   origin: [
     "https://web-withbuddy-fe-lz9xefyc65850cc3.sel4.cloudtype.app",
-    "https://www.skuwithbuddy.com",
+    "https://skuwithbuddy.com",
     "https://port-0-withbuddy-be-lz9xefyc65850cc3.sel4.cloudtype.app",
     "http://localhost:5173",
   ],
