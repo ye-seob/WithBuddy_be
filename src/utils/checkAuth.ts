@@ -17,7 +17,7 @@ const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
 const refreshToken = async (req: Request, res: Response) => {
   try {
     const token = req.cookies.refreshToken;
-
+    console.log(token);
     if (!token) {
       return res
         .status(401)
@@ -28,6 +28,7 @@ const refreshToken = async (req: Request, res: Response) => {
     try {
       data = jwt.verify(token, process.env.REFRESH_SECRET);
     } catch (error) {
+      console.log(error);
       return res
         .status(403)
         .json({ message: "유효하지 않은 리프레시 토큰입니다." });
