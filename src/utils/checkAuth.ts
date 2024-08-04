@@ -50,8 +50,9 @@ const refreshToken = async (req: Request, res: Response) => {
     );
 
     res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
       secure: true,
+      sameSite: "none",
+      httpOnly: true,
     });
 
     return res
