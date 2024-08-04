@@ -19,6 +19,7 @@ const refreshToken = async (req: Request, res: Response) => {
     const token = req.cookies.refreshToken;
     console.log(token);
     if (!token) {
+      console.log("토큰 전달 안됨");
       return res
         .status(401)
         .json({ message: "리프레시 토큰이 전달되지 않았습니다." });
