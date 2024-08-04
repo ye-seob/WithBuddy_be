@@ -16,7 +16,7 @@ app.use(cookieParser());
 const corsOptions = {
   origin: [
     "https://web-withbuddy-fe-lz9xefyc65850cc3.sel4.cloudtype.app",
-    "https://skuwithbuddy.com",
+    "https://www.skuwithbuddy.com",
     "https://port-0-withbuddy-be-lz9xefyc65850cc3.sel4.cloudtype.app",
     "http://localhost:5173",
   ],
