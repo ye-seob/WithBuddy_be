@@ -135,7 +135,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     const studentId = req.body.studentId;
 
     const user = await collection.findOne({ studentId });
-    console.log(user);
     const result = await collection.deleteOne(user);
 
     if (result.deletedCount === 1) {

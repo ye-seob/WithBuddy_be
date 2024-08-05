@@ -4,12 +4,7 @@ import dotenv from "dotenv";
 import collection from "../models/userModel";
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const fs = require("fs");
-const path = require("path");
 
-const imagePath = path.join(__dirname, "utils", "인증메일사진.jpg");
-const imageData = fs.readFileSync(imagePath).toString("base64");
-const imageBase64 = `data:image/jpeg;base64,${imageData}`;
 dotenv.config();
 const myEmail = process.env.EMAIL;
 const password = process.env.PASSWORD;
@@ -50,16 +45,7 @@ export const sendMail = async (req: Request, res: Response) => {
       to: email,
       subject: "WithBuddy 가입 인증 메일",
       html: `
-        <div style="position: relative; width: 600px; height: 400px; font-family: Arial, sans-serif; line-height: 1.6;">
-            <img src="${imageBase64}" alt="WithBuddy" style="width: 100%; height: auto; position: absolute; top: 0; left: 0;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #0066cc; text-align: center; background: rgba(255, 255, 255, 0.7); padding: 20px; border-radius: 10px;">
-                <h2>WithBuddy 가입 인증 메일</h2>
-                <p>안녕하세요,</p>
-                <p>가입을 환영합니다. 아래의 인증 번호를 사용하여 이메일 인증을 완료해주세요.</p>
-                <h3 style="color: #0066cc;">인증 번호: ${code}</h3>
-                <p>감사합니다.<br>WithBuddy</p>
-            </div>
-        </div>
+        ${code}
     `,
     };
 
