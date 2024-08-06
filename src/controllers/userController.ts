@@ -37,11 +37,13 @@ export const login = async (req: Request, res: Response) => {
         secure: true,
         sameSite: "none",
         httpOnly: true,
+        domain: "skuwithbuddy.com",
       });
       res.cookie("refreshToken", refreshToken, {
         secure: true,
         sameSite: "none",
         httpOnly: true,
+        domain: "skuwithbuddy.com",
       });
 
       const response = {
