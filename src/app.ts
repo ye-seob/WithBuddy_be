@@ -13,6 +13,7 @@ const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
+  path: "/socket.io",
   cors: {
     origin: ["https://www.skuwithbuddy.com", "http://localhost:5173"],
     methods: ["GET", "POST"],
