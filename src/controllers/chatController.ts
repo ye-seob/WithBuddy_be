@@ -1,69 +1,43 @@
 import { Server, Socket } from "socket.io";
 import ChatMessage from "../models/chatModel";
+import { error } from "console";
 
-interface User {
-  socketId: string;
-  studentId: string;
-  major: string;
-  group: string;
-}
+export default function (io: Server): void {
+  io.on("connection", (socket: Socket) => {
+    console.log("새로운 클라이언트가 연결되었습니다.");
 
-const users: User[] = [];
+    socket.on("join room", async ({ major, studentId }) => {
+      const room = `${major}-${studentId.slice(-3)}`;
+      socket.join(room);
+      console.log(`${room} 방에 참가했습니다.`);
 
-const chatController = (io: Server) => {
-  io.on("connection", async (socket: Socket) => {
-    console.log("유저 연결 성공");
-
-    socket.on("register", async ({ studentId, major }) => {
-      const lastThreeDigits = studentId.slice(-3);
-      const group = `${major}-${lastThreeDigits}`;
-
-      const user: User = { socketId: socket.id, studentId, major, group };
-      users.push(user);
-
-      socket.join(group);
-      console.log(`User ${studentId} joined group ${group}`);
-
-      // 해당 그룹의 이전 메시지 불러오기
-      try {
-        const previousMessages = await ChatMessage.find({ group })
-          .sort({ timestamp: -1 })
-          .limit(50)
-          .lean();
-        socket.emit("previousMessages", previousMessages.reverse());
-      } catch (error) {
-        console.error("Error fetching previous messages:", error);
-        socket.emit("error", "Failed to fetch previous messages");
-      }
+      // 클라이언트에게 해당 방의 과거 메시지 전송
+      const previousMessages = await ChatMessage.find({ group: room }).sort({
+        timestamp: 1,
+      });
+      socket.emit("previous messages", previousMessages);
     });
 
-    socket.on("chat message", async (msg) => {
-      const user = users.find((u) => u.socketId === socket.id);
-      if (user) {
-        const messageWithInfo = new ChatMessage({
-          studentId: user.studentId,
-          message: msg,
-          timestamp: new Date(),
-          group: user.group,
-        });
-
-        try {
-          await messageWithInfo.save();
-          io.to(user.group).emit("chat message", messageWithInfo);
-        } catch (error) {
-          console.error("Error saving message:", error);
-          socket.emit("error", "Failed to save message");
-        }
+    socket.on("chat message", async (data) => {
+      const { studentId, major, message } = data;
+      if (!studentId || !major || !message) {
+        console.error("필요한 정보가 누락되었습니다.", error);
+        return;
       }
+      const room = `${major}-${studentId.slice(-3)}`;
+
+      const chatMessage = new ChatMessage({
+        group: room,
+        studentId,
+        message,
+      });
+      await chatMessage.save();
+
+      io.to(room).emit("chat message", chatMessage);
     });
 
     socket.on("disconnect", () => {
-      const index = users.findIndex((u) => u.socketId === socket.id);
-      if (index !== -1) {
-        users.splice(index, 1);
-      }
-      console.log("유저 연결 종료");
+      console.log("클라이언트가 연결을 끊었습니다.");
     });
   });
-};
-export default chatController;
+}

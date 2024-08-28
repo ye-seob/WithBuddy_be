@@ -1,27 +1,20 @@
 import express from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import router from "./routes/index";
 import connectDB from "./db";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import http from "http";
-import { Server } from "socket.io";
-import chatController from "./controllers/chatController"; // chatController 불러오기
+import cors from "cors";
+import chatController from "./controllers/chatController";
 
+// 환경 변수 로드
 dotenv.config();
-const cors = require("cors");
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: ["https://www.skuwithbuddy.com", "http://localhost:5173"],
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+const httpServer = createServer(app);
 
-app.use(cookieParser());
-
+// CORS 설정
 const corsOptions = {
   origin: ["https://www.skuwithbuddy.com", "http://localhost:5173"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -29,17 +22,29 @@ const corsOptions = {
   optionsSuccessStatus: 204,
   credentials: true,
 };
-
 app.use(cors(corsOptions));
-connectDB();
 
+// 미들웨어 설정
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-chatController(io);
-
+// 라우터 설정
 app.use("/api", router);
 
-server.listen(process.env.PORT, function () {
-  console.log(` ${process.env.PORT}포트 실행 중`);
+// 데이터베이스 연결
+connectDB();
+
+// Socket.io 설정
+const io = new Server(httpServer, {
+  cors: {
+    origin: ["https://www.skuwithbuddy.com", "http://localhost:5173"],
+  },
+});
+
+chatController(io);
+
+// 서버 시작
+httpServer.listen(process.env.PORT, function () {
+  console.log(`${process.env.PORT} 포트에서 서버가 실행 중입니다.`);
 });
