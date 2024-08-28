@@ -44,7 +44,6 @@ const io = new Server(httpServer, {
 
 chatController(io);
 
-// 서버 시작
 httpServer.listen(process.env.PORT, function () {
   console.log(`${process.env.PORT} 포트에서 서버가 실행 중입니다.`);
 });
