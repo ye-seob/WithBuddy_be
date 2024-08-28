@@ -37,13 +37,13 @@ export const login = async (req: Request, res: Response) => {
         secure: true,
         sameSite: "none",
         httpOnly: true,
-        domain: "skuwithbuddy.com",
+        // domain: "skuwithbuddy.com",
       });
       res.cookie("refreshToken", refreshToken, {
         secure: true,
         sameSite: "none",
         httpOnly: true,
-        domain: "skuwithbuddy.com",
+        // domain: "skuwithbuddy.com",
       });
 
       const response = {
@@ -70,13 +70,13 @@ export const logout = async (req: Request, res: Response) => {
       secure: true,
       sameSite: "none",
       httpOnly: true,
-      domain: "skuwithbuddy.com",
+      // domain: "skuwithbuddy.com",
     });
     res.clearCookie("refreshToken", {
       secure: true,
       sameSite: "none",
       httpOnly: true,
-      domain: "skuwithbuddy.com",
+      // domain: "skuwithbuddy.com",
     });
     res.status(200).json({
       message: "로그아웃 성공",
