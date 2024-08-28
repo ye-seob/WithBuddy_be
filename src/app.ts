@@ -1,6 +1,5 @@
 import express from "express";
 import { createServer } from "https";
-import fs from "fs";
 import { Server } from "socket.io";
 import router from "./routes/index";
 import connectDB from "./db";
@@ -13,12 +12,7 @@ import chatController from "./controllers/chatController";
 dotenv.config();
 
 const app = express();
-const httpsOptions = {
-  key: fs.readFileSync("src/utils/공개키.crt"), // SSL 인증서의 비밀 키
-  cert: fs.readFileSync("src/utils/인증서.crt"), // SSL 인증서
-};
-
-const httpsServer = createServer(httpsOptions, app);
+const httpServer = createServer(app);
 
 // CORS 설정
 const corsOptions = {
@@ -42,7 +36,7 @@ app.use("/api", router);
 connectDB();
 
 // Socket.io 설정
-const io = new Server(httpsServer, {
+const io = new Server(httpServer, {
   cors: {
     origin: ["https://www.skuwithbuddy.com", "http://localhost:5173"],
   },
@@ -50,6 +44,6 @@ const io = new Server(httpsServer, {
 
 chatController(io);
 
-httpsServer.listen(process.env.PORT, function () {
+httpServer.listen(process.env.PORT, function () {
   console.log(`${process.env.PORT} 포트에서 서버가 실행 중입니다.`);
 });
