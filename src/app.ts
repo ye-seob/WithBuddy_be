@@ -38,7 +38,11 @@ connectDB();
 // Socket.io 설정
 const io = new Server(httpServer, {
   cors: {
-    origin: ["https://www.skuwithbuddy.com", "http://localhost:5173"],
+    origin: [
+      "https://www.skuwithbuddy.com",
+      "https://api.skuwithbuddy.com",
+      "http://localhost:5173",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
