@@ -1,5 +1,5 @@
 import express from "express";
-import { createServer } from "https";
+import { createServer } from "http";
 import { Server } from "socket.io";
 import router from "./routes/index";
 import connectDB from "./db";
@@ -39,6 +39,8 @@ connectDB();
 const io = new Server(httpServer, {
   cors: {
     origin: ["https://www.skuwithbuddy.com", "http://localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
