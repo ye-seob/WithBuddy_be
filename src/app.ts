@@ -14,13 +14,10 @@ dotenv.config();
 
 const app = express();
 const httpsOptions = {
-  key: fs.readFileSync(
-    "7ada883f939b58c9cac331a58a164147d495c8a3c1270af86640f1767ec31950"
-  ), // SSL 인증서의 비밀 키
-  cert: fs.readFileSync(
-    "049b34ec90ffe5b1a86af2f11f001798cbbc022d7c71b59f8b396a6b8b9b67d7"
-  ), // SSL 인증서
+  key: fs.readFileSync("src/utils/공개키.crt"), // SSL 인증서의 비밀 키
+  cert: fs.readFileSync("src/utils/인증서.crt"), // SSL 인증서
 };
+
 const httpsServer = createServer(httpsOptions, app);
 
 // CORS 설정
