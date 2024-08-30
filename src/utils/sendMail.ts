@@ -45,8 +45,14 @@ export const sendMail = async (req: Request, res: Response) => {
       to: email,
       subject: "WithBuddy 가입 인증 메일",
       html: `
-        ${code}
-    `,
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+      <h2 style="text-align: center; color: #333;">WithBuddy 가입 인증 메일</h2>
+      <p>안녕하세요,</p>
+      <p>WithBuddy에 가입해주셔서 감사합니다. 아래 인증번호를 사용하여 가입을 완료해 주세요:</p>
+      <h3 style="color: #0066cc; text-align: center; font-size: 24px; border: 1px solid #0066cc; padding: 10px; border-radius: 5px; display: inline-block;">${code}</h3>
+      <p>감사합니다.</p>
+    </div>
+  `,
     };
 
     await transporter.sendMail(mailOptions);
