@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import ChatMessage from "../models/chatModel";
-import { error } from "console";
+import cron from "node-cron";
 
 export default function (io: Server): void {
   io.on("connection", (socket: Socket) => {
@@ -8,7 +8,6 @@ export default function (io: Server): void {
       const room = `${major}-${studentId.slice(-3)}`;
       socket.join(room);
 
-      // 클라이언트에게 해당 방의 과거 메시지 전송
       const previousMessages = await ChatMessage.find({ group: room }).sort({
         timestamp: 1,
       });
@@ -18,7 +17,7 @@ export default function (io: Server): void {
     socket.on("chat message", async (data) => {
       const { studentId, major, message } = data;
       if (!studentId || !major || !message) {
-        console.error("필요한 정보가 누락되었습니다.", error);
+        console.error("필요한 정보가 누락되었습니다.");
         return;
       }
       const room = `${major}-${studentId.slice(-3)}`;
@@ -34,5 +33,16 @@ export default function (io: Server): void {
     });
 
     socket.on("disconnect", () => {});
+  });
+  cron.schedule("0 0 * * *", async () => {
+    try {
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+      await ChatMessage.deleteMany({ timestamp: { $lt: twoDaysAgo } });
+      console.log("2일 지난 메시지를 삭제했습니다.");
+    } catch (error) {
+      console.error("메시지 삭제 중 오류 발생:", error);
+    }
   });
 }
