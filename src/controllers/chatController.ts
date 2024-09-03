@@ -1,26 +1,66 @@
 import { Server, Socket } from "socket.io";
 import ChatMessage from "../models/chatModel";
-// import cron from "node-cron";
 
 export default function (io: Server): void {
   io.on("connection", (socket: Socket) => {
+    // 방에 참가
     socket.on("join room", async ({ major, studentId }) => {
-      const room = `${major}-${studentId.slice(-3)}`;
+      const lastThree = parseInt(studentId.slice(-3), 10);
+      let roomRange;
+
+      // 마지막 세 자리 숫자에 따라 방 범위 설정
+      if (lastThree >= 1 && lastThree <= 19) {
+        roomRange = "1-19";
+      } else if (lastThree >= 20 && lastThree <= 39) {
+        roomRange = "20-39";
+      } else if (lastThree >= 40 && lastThree <= 59) {
+        roomRange = "40-59";
+      } else if (lastThree >= 60 && lastThree <= 90) {
+        roomRange = "60-90";
+      } else if (lastThree > 90 && lastThree <= 200) {
+        roomRange = "91-200";
+      } else {
+        socket.emit("error", "적절한 학번 구간에 속하지 않습니다.");
+        return;
+      }
+
+      const room = `${major}-${roomRange}`;
       socket.join(room);
 
+      // 이전 메시지를 불러오기
       const previousMessages = await ChatMessage.find({ group: room }).sort({
         timestamp: 1,
       });
       socket.emit("previous messages", previousMessages);
     });
 
+    // 채팅 메시지 전송
     socket.on("chat message", async (data) => {
       const { studentId, major, message, name } = data;
       if (!studentId || !major || !message || !name) {
         console.error("필요한 정보가 누락되었습니다.");
         return;
       }
-      const room = `${major}-${studentId.slice(-3)}`;
+      const lastThree = parseInt(studentId.slice(-3), 10);
+      let roomRange;
+
+      // 메시지를 보낼 방 결정
+      if (lastThree >= 1 && lastThree <= 19) {
+        roomRange = "1번방";
+      } else if (lastThree >= 20 && lastThree <= 39) {
+        roomRange = "2번방";
+      } else if (lastThree >= 40 && lastThree <= 59) {
+        roomRange = "3번방";
+      } else if (lastThree >= 60 && lastThree <= 90) {
+        roomRange = "4번방";
+      } else if (lastThree > 90 && lastThree <= 200) {
+        roomRange = "5번방";
+      } else {
+        socket.emit("error", "적절한 학번 구간에 속하지 않습니다.");
+        return;
+      }
+
+      const room = `${major}-${roomRange}`;
 
       const chatMessage = new ChatMessage({
         group: room,
@@ -35,15 +75,4 @@ export default function (io: Server): void {
 
     socket.on("disconnect", () => {});
   });
-  // cron.schedule("0 0 * * *", async () => {
-  //   try {
-  //     const twoDaysAgo = new Date();
-  //     twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-
-  //     await ChatMessage.deleteMany({ timestamp: { $lt: twoDaysAgo } });
-  //     console.log("2일 지난 메시지를 삭제했습니다.");
-  //   } catch (error) {
-  //     console.error("메시지 삭제 중 오류 발생:", error);
-  //   }
-  // });
 }
