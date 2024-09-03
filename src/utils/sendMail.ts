@@ -63,6 +63,27 @@ export const sendMail = async (req: Request, res: Response) => {
     res.status(500).send("이메일 전송 실패");
   }
 };
+
+export const checkAuthCode = async (req: Request, res: Response) => {
+  const { email, authCode } = req.body;
+
+  try {
+    const storedCode = authCodes[email];
+    if (!storedCode) {
+      return res.status(400).send("인증 코드가 없습니다.");
+    }
+
+    if (authCode !== storedCode) {
+      return res.status(400).send("불일치");
+    }
+    delete authCodes[email];
+
+    res.status(200).send("일치");
+  } catch (error) {
+    res.status(500).send("서버 오류");
+  }
+};
+
 export const sendFindMail = async (req: Request, res: Response) => {
   const { email, studentId }: { email: string; studentId: string } = req.body;
 
@@ -113,25 +134,5 @@ export const sendFindMail = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("이메일 전송 실패");
-  }
-};
-
-export const checkAuthCode = async (req: Request, res: Response) => {
-  const { email, authCode } = req.body;
-
-  try {
-    const storedCode = authCodes[email];
-    if (!storedCode) {
-      return res.status(400).send("인증 코드가 없습니다.");
-    }
-
-    if (authCode !== storedCode) {
-      return res.status(400).send("불일치");
-    }
-    delete authCodes[email];
-
-    res.status(200).send("일치");
-  } catch (error) {
-    res.status(500).send("서버 오류");
   }
 };
