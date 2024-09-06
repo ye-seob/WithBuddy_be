@@ -1,9 +1,10 @@
 import express from "express";
-import { match } from "../controllers/matchController";
+import { groupMatch, personalMatch } from "../controllers/matchController";
 import { checkAuth } from "../utils/checkAuth";
 
 const router = express.Router();
 
-router.get("/", checkAuth, match);
+router.get("/groupMatch", checkAuth, groupMatch);
+router.get("/personaMatch", checkAuth, personalMatch);
 
 export default router;

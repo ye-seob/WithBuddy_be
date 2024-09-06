@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const chatSchema = new mongoose.Schema({
-  group: {
+  room: {
     type: String,
     required: true,
   },
