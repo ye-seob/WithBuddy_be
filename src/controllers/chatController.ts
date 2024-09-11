@@ -34,13 +34,6 @@ export default function (io: Server): void {
       await chatMessage.save();
 
       io.to(room).emit("chat message", chatMessage);
-
-      // 새 메시지가 올 때마다 알림 이벤트 전송
-      io.to(room).emit("notification", {
-        title: "새로운 메시지",
-        message: `${name}님으로부터 새로운 메시지가 도착했습니다.`,
-        timestamp: new Date(),
-      });
     });
 
     socket.on("disconnect", () => {});
