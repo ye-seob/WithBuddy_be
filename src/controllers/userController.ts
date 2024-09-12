@@ -70,6 +70,7 @@ export const logout = async (req: Request, res: Response) => {
       secure: true,
       sameSite: "none",
       httpOnly: true,
+      //서브도메인은 제외한다
       domain: "skuwithbuddy.com",
     });
     res.clearCookie("refreshToken", {
@@ -103,12 +104,12 @@ export const signup = async (req: Request, res: Response) => {
     } = req.body;
 
     if (pin != pinConfirm) {
-      return res.status(500).json("pin번호 불일치");
+      return res.status(400).json("pin번호 불일치");
     }
     const existingUser = await collection.findOne({ studentId });
 
     if (existingUser) {
-      return res.status(500).json("이미 가입된 학번입니다.");
+      return res.status(400).json("이미 가입된 학번입니다.");
     }
     const hashingPassword = await bcrypt.hash(pin, 5);
     await collection.create({
@@ -152,6 +153,6 @@ export const deleteUser = async (req: Request, res: Response) => {
       res.status(404).send("삭제에 실패했습니다");
     }
   } catch (error) {
-    res.status(500).send("서버 오류");
+    res.status(500).json({ error: "서버 문제 발생" });
   }
 };

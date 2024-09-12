@@ -24,7 +24,7 @@ export const groupMatch = async (req: Request, res: Response) => {
     } else if (lastThree > 90 && lastThree <= 200) {
       regex = /^[0-9]*(9[1-9]|1[0-9][0-9]|200)$/;
     } else {
-      return res.status(400).send("적절한 학번 구간에 속하지 않습니다.");
+      return res.status(400).send("적절한 학번이 아닙니다");
     }
 
     const filter: any = { studentId: { $regex: regex } };
@@ -43,7 +43,7 @@ export const groupMatch = async (req: Request, res: Response) => {
 
     return res.status(200).json(buddys);
   } catch (error) {
-    console.error("Error while matching students:", error);
+    console.error(error);
     return res.status(500).send("서버 오류 발생");
   }
 };
@@ -73,7 +73,7 @@ export const personalMatch = async (req: Request, res: Response) => {
 
     return res.status(200).json(buddys);
   } catch (error) {
-    console.error("Error while matching students:", error);
+    console.error(error);
     return res.status(500).send("서버 오류 발생");
   }
 };

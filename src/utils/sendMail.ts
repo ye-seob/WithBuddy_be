@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
 dotenv.config();
+
 const myEmail = process.env.EMAIL;
 const password = process.env.PASSWORD;
 
@@ -133,6 +134,6 @@ export const sendFindMail = async (req: Request, res: Response) => {
     res.status(200).send("이메일 전송 성공");
   } catch (error) {
     console.log(error);
-    res.status(500).send("이메일 전송 실패");
+    res.status(500).send("서버 내부 오류");
   }
 };

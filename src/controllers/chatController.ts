@@ -1,4 +1,3 @@
-// 백엔드 코드 수정 (notification 이벤트 추가)
 import { Server, Socket } from "socket.io";
 import ChatMessage from "../models/chatModel";
 

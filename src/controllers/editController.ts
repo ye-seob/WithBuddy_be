@@ -27,7 +27,7 @@ export const editUserInfo = async (req: Request, res: Response) => {
 
     return res.status(200).send("사용자 정보가 성공적으로 수정되었습니다.");
   } catch (error) {
-    console.error("사용자 정보 수정 실패:", error);
+    console.error(error);
     return res.status(500).json({ error: "서버 문제 발생" });
   }
 };
